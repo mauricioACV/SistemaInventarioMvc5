@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row col-md-12 justify-content-between">
+    <div class="row col-md-6">
+        <div class="card col-12" style="border-radius:15px !important">
+            <div class="card-body">
+                <h2 class="text-left">Buscar Producto</h2>
+                <p></p>
+                <div class="container-fluid">
+                    <div class="text-left">
+                        <div class="col-12">
+                            <div class="form-group bmd-form-group">
+                                <label for="item_CodSapBuscar" class="bmd-label-floating text-left" style="color:black !important">Código SAP o Nombre Producto:</label>
+                                <input type="text" name="item_CodSapBuscar" id="txtBusquedaProducto" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="container text-center">
+                            <button class="btn btn-info" id="btnBuscar">Buscar</button>
+                        </div>
+                    </div>
+                    <div class="table table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-dark" style="background-color:cadetblue">
+                                <tr>
+                                    <th class="">
+                                        CÓDIGO
+                                    </th>
+                                    <th class="">
+                                        NOMBRE PRODUCTO
+                                    </th>
+                                    <th class="">
+                                        ACCIÓN
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="RestultBusquedaProducto" class=""></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-md-6">
+        <div class="card col-12" style="border-radius:15px !important">
+            <div class="card-body">
+                <h2 class="text-left">Ingreso de Productos En Almacén</h2>
+                <p></p>
+                <div class="container-fluid">
+                    <div class="text-left">
+                        <div class="col-12">
+                            <div class="">
+                                <label class="form-group bmd-form-group" id="lbNombreProducto"></label>
+                                <label class="form-group bmd-form-group">Código Sap:</label>
+                                <input type="text" id="lbCodigoSap" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group bmd-form-group is-filled">
+                                <label class="bmd-label-floating" style="color:black !important">Almacen:</label>
+                                <select class="form-control" id="ddlAlmacen" style="width:50%">
+                                    <option disabled selected value="">Seleccione Almacen-></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group bmd-form-group">
+                                <label for="item_ubicacion" class="bmd-label-floating text-left" style="color:black !important">Ubicación:</label>
+                                <select class="form-control" id="ddlUbicacion" style="width:50%">
+                                    <option disabled selected value="">Seleccione Ubicación-></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group bmd-form-group">
+                                <label for="item_stock" class="bmd-label-floating" style="color:black !important">Stock:</label>
+                                <input type="number" name="item_stock" id="txtStockProducto" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group bmd-form-group">
+                                <label for="item_VUnitario" class="bmd-label-floating" style="color:black !important">Valor Unitario:</label>
+                                <input type="number" name="item_VUnitario" id="txtValorUnitario" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="container text-center">
+                            <button class="btn btn-info" id="btnRegistrar">Registrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Js/InventarioProducto/MainRegistrarProducto.js"></script>
+<script src="~/Vendors/SweetAlert2/sweetalert2@10.js"></script>

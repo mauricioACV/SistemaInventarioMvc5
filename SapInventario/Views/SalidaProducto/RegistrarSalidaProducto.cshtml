@@ -1,0 +1,70 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>RegistrarSalidaProducto</title>
+
+</head>
+<body>
+    <div class="row col-md-12 justify-content-between">
+        <div class="row col-md-6">
+            <div class="card col-12" style="border-radius:15px !important">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <h2 class="text-left">Selección de Productos</h2>
+                        <div class="text-left">
+                            <div class="col-12">
+                                <div class="form-group bmd-form-group">
+                                    <label for="item_CodSapBuscar" class="bmd-label-floating text-left" style="color:black !important">Código SAP o Nombre Producto:</label>
+                                    <input type="text" name="item_CodSapBuscar" id="txtCodSap" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container text-center">
+                            <button class="btn btn-info" id="btnBuscar">Buscar Producto</button>
+                        </div>
+                        <div>
+                            <table class="table-bordered col-12">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Código Sap
+                                        </th>
+                                        <th>
+                                            Nombre Producto
+                                        </th>
+                                        <th>
+                                            Acciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detalleProducto"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row col-md-6">
+            <div class="card col-12" style="border-radius:15px !important">
+                <div class="card-body">
+                    <h2 class="text-left">Productos Para Entrega</h2>
+                    <div class="col-md-12 p-2 border border-success" style="border-radius:15px">
+                        <div class="row col-md-12 p-1" style="align-content:center !important">
+                            <ul class="align-content-between" style="text-align:center !important; width:100%" id="ulListadoSalida"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Js/SalidaProducto/MainSalidaProducto.js"></script>
+    <script src="~/Vendors/SweetAlert2/sweetalert2@10.js"></script>
+</body>
+</html>
