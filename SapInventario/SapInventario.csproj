@@ -103,6 +103,7 @@
     <Content Include="Css\bootstrap.css" />
     <Content Include="Global.asax" />
     <Content Include="Js\InventarioProducto\MainRegistrarProducto.js" />
+    <Content Include="Js\SalidaProducto\MainReporteSalidaProducto.js" />
     <Content Include="Js\SalidaProducto\MainSalidaProducto.js" />
     <Content Include="Vendors\assets\avatar\Avatar.png" />
     <Content Include="Vendors\assets\icons\mCSB_buttons.png" />
@@ -114,6 +115,7 @@
     <Content Include="Vendors\css\normalize.css" />
     <Content Include="Vendors\css\style.css" />
     <Content Include="Vendors\css\sweetalert2.min.css" />
+    <Content Include="Vendors\Html2Pdf\html2pdf.bundle.min.js" />
     <Content Include="Vendors\js\bootstrap-material-design.min.js" />
     <Content Include="Vendors\js\bootstrap.min.js" />
     <Content Include="Vendors\js\jquery-3.4.1.min.js" />
@@ -151,6 +153,7 @@
     <Compile Include="Entidades\Interfaces\IInventarioProductoRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\IInventarioProductoServicio.cs" />
     <Compile Include="Entidades\Interfaces\IProductoRepositorio.cs" />
+    <Compile Include="Entidades\Interfaces\ISalidaProductoRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\ISalidaProductoServicio.cs" />
     <Compile Include="Entidades\Interfaces\IUnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Entidades\Interfaces\IUsuarioRepositorio.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Infraestructura\Data\Repositorios\DistribucionInventarioRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\InventarioProductoRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\ProductoRepositorio.cs" />
+    <Compile Include="Infraestructura\Data\Repositorios\SalidaProductoRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\UsuarioRepositorio.cs" />
     <Compile Include="Infraestructura\Data\UnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -205,6 +209,8 @@
     <Content Include="Vendors\webfonts\robotocondensed-light-webfont.woff2" />
     <Content Include="Vendors\webfonts\robotocondensed-regular-webfont.woff" />
     <Content Include="Vendors\webfonts\robotocondensed-regular-webfont.woff2" />
+    <Content Include="Views\SalidaProducto\ReporteSalidaProducto.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

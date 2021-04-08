@@ -85,15 +85,15 @@ namespace SapInventario.Infraestructura.Data.Repositorios
             return response;
         }
 
-        public List<InventarioProducto> ObtenerProductoExistenteDistribucion(string codigoSap)
+        public int ObtenerAlmacenProductoExistenteDistribucion(string codigoSap)
         {
             SqlDataReader dr = null;
             SqlCommand cmd = null;
-            List<InventarioProducto> objProducto = new List<InventarioProducto>();
+            int codigoAlmacen = 0;
 
             try
             {
-                var query = @"select Id, Stock, CodigoAlmacen from DistribucionInventario where CodigoSap = @CodigoSap";
+                var query = @"select CodigoAlmacen from DistribucionInventario where CodigoSap = @CodigoSap";
 
                 using (cmd = new SqlCommand(query, _conexion))
                 {
@@ -102,16 +102,9 @@ namespace SapInventario.Infraestructura.Data.Repositorios
 
                     using (dr = cmd.ExecuteReader())
                     {
-                        while (dr.Read())
+                        if (dr.Read())
                         {
-                            InventarioProducto objInvProducto = new InventarioProducto
-                            {
-                                Id = Convert.ToInt32(dr["Id"]),
-                                Stock = Convert.ToInt32(dr["Stock"]),
-                                CodigoAlmacen = Convert.ToInt32(dr["CodigoAlmacen"])
-                            };
-
-                            objProducto.Add(objInvProducto);                            
+                            codigoAlmacen = Convert.ToInt32(dr["CodigoAlmacen"]);                            
                         }
                     }
                 }
@@ -126,7 +119,7 @@ namespace SapInventario.Infraestructura.Data.Repositorios
                 _conexion.Close();
             }
 
-            return objProducto;
+            return codigoAlmacen;
         }
 
         public int ObtenerStockPorCodigoSapCodigoAlmacen(string codigoSap, int codigoAlmacen)
@@ -143,6 +136,43 @@ namespace SapInventario.Infraestructura.Data.Repositorios
                 {
                     cmd.Parameters.AddWithValue("@CodigoSap", codigoSap);
                     cmd.Parameters.AddWithValue("@CodigoAlmacen", codigoAlmacen);
+                    _conexion.Open();
+
+                    using (dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            stockProducto = Convert.ToInt32(dr["Stock"]);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                _conexion.Close();
+            }
+
+            return stockProducto;
+        }
+
+        public int ObtenerStockTotalProductoPorCodigoSap(string codigoSap)
+        {
+            SqlDataReader dr = null;
+            SqlCommand cmd = null;
+            int stockProducto = 0;
+
+            try
+            {
+                var query = @"select Stock from DistribucionInventario where CodigoSap = @CodigoSap";
+
+                using (cmd = new SqlCommand(query, _conexion))
+                {
+                    cmd.Parameters.AddWithValue("@CodigoSap", codigoSap);
                     _conexion.Open();
 
                     using (dr = cmd.ExecuteReader())

@@ -50,5 +50,12 @@ namespace SapInventario.Controllers
             var ListUbicacionAlmacen = _inventarioProductoServicio.ObtenerUbicacionAlmacenPorCodigoAlmacen(codigoAlmacen);
             return Json(new { data = ListUbicacionAlmacen });
         }
+
+        [HttpPost]
+        public ActionResult ObtenerAlmacenProductoExistenteDistribucion(string codigoSap)
+        {
+            var codigoAlmacen = _inventarioProductoServicio.ObtenerAlmacenProductoExistenteDistribucion(codigoSap);
+            return Json(new { data = codigoAlmacen });
+        }
     }
 }

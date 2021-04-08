@@ -30,14 +30,20 @@
                             <button class="btn btn-info" id="btnBuscar">Buscar Producto</button>
                         </div>
                         <div>
-                            <table class="table-bordered col-12">
-                                <thead>
+                            <table class="table-bordered table-striped col-12">
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>
                                             Código Sap
                                         </th>
                                         <th>
                                             Nombre Producto
+                                        </th>
+                                        <th>
+                                            Stock
+                                        </th>
+                                        <th>
+                                            Almacen
                                         </th>
                                         <th>
                                             Acciones
@@ -52,13 +58,16 @@
             </div>
         </div>
         <div class="row col-md-6">
-            <div class="card col-12" style="border-radius:15px !important">
+            <div class="card col-12" style="border-radius:8px !important">
                 <div class="card-body">
                     <h2 class="text-left">Productos Para Entrega</h2>
-                    <div class="col-md-12 p-2 border border-success" style="border-radius:15px">
+                    <div class="col-md-12 p-2 border border-success" style="border-radius:8px">
                         <div class="row col-md-12 p-1" style="align-content:center !important">
                             <ul class="align-content-between" style="text-align:center !important; width:100%" id="ulListadoSalida"></ul>
                         </div>
+                    </div>
+                    <div class="container text-center">
+                        <button class="btn btn-info" id="btnGenerar">Generar Entrega</button>
                     </div>
                 </div>
             </div>

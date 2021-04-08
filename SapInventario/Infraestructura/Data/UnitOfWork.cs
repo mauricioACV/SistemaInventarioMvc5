@@ -16,6 +16,7 @@ namespace SapInventario.Infraestructura.Data
         private readonly IProductoRepositorio _productoRepositorio;
         private readonly IAlmacenUbicacionRepositorio _almacenUbicacionRepositorio;
         private readonly IDistribucionInventarioRepositorio _distribucionInventarioRepositorio;
+        private readonly ISalidaProductoRepositorio _salidaProductoRepositorio;
 #pragma warning restore 0649
 
         public UnitOfWork()
@@ -34,6 +35,8 @@ namespace SapInventario.Infraestructura.Data
         public IAlmacenUbicacionRepositorio AlmacenUbicacionRepositorio => _almacenUbicacionRepositorio ?? new AlmacenUbicacionRepositorio(_conexion);
 
         public IDistribucionInventarioRepositorio DistribucionInventarioRepositorio => _distribucionInventarioRepositorio ?? new DistribucionInventarioRepositorio(_conexion);
+
+        public ISalidaProductoRepositorio SalidaProductoRepositorio => _salidaProductoRepositorio ?? new SalidaProductoRepositorio(_conexion);
 
         public void Dispose()
         {

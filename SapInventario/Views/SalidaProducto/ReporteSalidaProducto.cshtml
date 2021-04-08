@@ -1,0 +1,111 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Css/bootstrap.css" rel="stylesheet" />
+    <title>Reporte Salida Producto</title>
+</head>
+<body>
+    <button id="btnGeneraPdf">PDF</button>
+    <div class="container" id="zonaImpresion">
+        <div class="row col-md-12 justify-content-center">
+            <div class="card col-12">
+                <div class="card-header">
+                    <h3>ACTA DE ENTREGA SIMPLE: BODEGA DE INSUMOS</h3>
+                    <div class="row justify-content-between">
+                        <div class="row col-8">
+                            <div class="col-12 border border-dark text-center" style="background-color:darkgrey">
+                                <p style="font-size:10px"><strong>CONSTANCIA</strong></p>
+                            </div>
+                            <div class="col-12 border border-dark mb-1 justify-content-around">
+                                <p style="font-size:10px">
+                                    El Área Logística de la Sección Compras y Logística TIC., del Departamento de las Técnologías de la Información y las Comunicaciones de Carabineros, procede a hacer entrega de lo siguiente:
+                                </p>
+                            </div>
+                            <div class="col-12 border border-dark mt-1" style="font-size:10px">
+                                <strong>entregado a:</strong>
+                            </div>
+                        </div>
+                        <div class="row col-4">
+                            <div class="col-12 border border-dark mb-1" style="border-radius:8px">
+                                <div class="container">
+                                    <div class="row justify-content-between text-center">
+                                        <div class="col-12" style="font-size:10px"><strong>ACTA</strong></div>
+                                        <div class="col-12" style="font-size:10px"><strong>N° <label id="numActa"></label></strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 border mt-1">
+                                <div class="container">
+                                    <div class="row justify-content-between text-center">
+                                        <div class="col-4 border" style="background-color:darkgrey; font-size:10px">dia</div>
+                                        <div class="col-4 border" style="background-color:darkgrey; font-size:10px">mes</div>
+                                        <div class="col-4 border" style="background-color:darkgrey; font-size:10px">año</div>
+                                        <div class="col-4 border"><label id="lblDia"></label></div>
+                                        <div class="col-4 border"><label id="lblMes"></label></div>
+                                        <div class="col-4 border"><label id="lblAgno"></label></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <table class="table table-bordered table-striped table-sm col-12 text-center">
+                        <thead class="text-dark" style="background-color:cadetblue; font-size:10px">
+                            <tr>
+                                <th class="">
+                                    CÓDIGO
+                                </th>
+                                <th class="">
+                                    DESCIPCIÓN
+                                </th>
+                                <th class="">
+                                    UND
+                                </th>
+                                <th class="">
+                                    CANTIDAD
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="listadoProductoEntrega" style="font-size:10px"></tbody>
+                    </table>
+                </div>
+                <div class=" card-footer">
+                    <div class="row">
+                        <div class="row col-12">
+                            <div class="col-8 p-0">
+                                <div class="col-12 border text-center" style="font-size:10px; background-color:darkgrey"><strong>Observaciones:</strong></div>
+                                <div class="col-12 border" style="font-size:10px">Aquí escribir Observaciones relevantes</div>
+                            </div>
+                        </div>
+                        <div class="m-3"></div>
+                        <div class="row col-12">
+                            <div class="col-6 ">
+                                <div class="col-6 border-top text-center" style="margin: auto;">
+                                    <div>Entregado por:</div>
+                                    <div>Mauricio C.</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="col-6 border-top text-center" style="margin: auto;">
+                                    <div>Recepcionado por:</div>
+                                    <div>Mauricio C.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Vendors/Html2Pdf/html2pdf.bundle.min.js"></script>
+    <script src="~/Js/SalidaProducto/MainReporteSalidaProducto.js"></script>
+</body>
+</html>

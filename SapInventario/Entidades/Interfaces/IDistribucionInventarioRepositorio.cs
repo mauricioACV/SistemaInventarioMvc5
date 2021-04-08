@@ -10,7 +10,8 @@ namespace SapInventario.Entidades.Interfaces
     {
         bool RegistrarProductoEnAlmacen(InventarioProducto inventarioProducto);
         bool ActualizarProductoDistribucion(InventarioProducto inventarioProducto);
-        List<InventarioProducto> ObtenerProductoExistenteDistribucion(string codigoSap);
+        int ObtenerAlmacenProductoExistenteDistribucion(string codigoSap);
         int ObtenerStockPorCodigoSapCodigoAlmacen(string codigoSap, int codigoAlmacen);
+        int ObtenerStockTotalProductoPorCodigoSap(string codigoSap);
     }
 }

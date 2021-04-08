@@ -15,6 +15,11 @@ namespace SapInventario.Aplicacion
             _unitOfWork = unitOfWork;
         }
 
+        public int ObtenerAlmacenProductoExistenteDistribucion(string codigoSap)
+        {
+            return _unitOfWork.DistribucionInventarioRepositorio.ObtenerAlmacenProductoExistenteDistribucion(codigoSap);
+        }
+
         public List<Almacen> ObtenerListaAlmacenes()
         {
             return _unitOfWork.AlmacenRepositorio.ObtenerListaAlmacenes();
@@ -36,13 +41,11 @@ namespace SapInventario.Aplicacion
             bool registrarDistribucion = false;
             bool registrarInventario = false;
 
-            List<InventarioProducto> objProducto = _unitOfWork.DistribucionInventarioRepositorio.ObtenerProductoExistenteDistribucion(productoRegistrar.CodigoSap);
-            var ObjProductoExiste = objProducto.Where(x => x.CodigoAlmacen == productoRegistrar.CodigoAlmacen).ToList();
+            var codigoAlmacenExiste = _unitOfWork.DistribucionInventarioRepositorio.ObtenerAlmacenProductoExistenteDistribucion(productoRegistrar.CodigoSap);
 
-            if (ObjProductoExiste.Count != 0)
+            if(codigoAlmacenExiste != 0)
             {
                 registrarInventario = _unitOfWork.InventarioProductoRepositorio.RegistrarProductoEnInventario(productoRegistrar);
-
                 productoRegistrar.Stock += _unitOfWork.DistribucionInventarioRepositorio.ObtenerStockPorCodigoSapCodigoAlmacen(productoRegistrar.CodigoSap, productoRegistrar.CodigoAlmacen);
                 registrarDistribucion = _unitOfWork.DistribucionInventarioRepositorio.ActualizarProductoDistribucion(productoRegistrar);
             }
@@ -52,12 +55,10 @@ namespace SapInventario.Aplicacion
                 registrarDistribucion = _unitOfWork.DistribucionInventarioRepositorio.RegistrarProductoEnAlmacen(productoRegistrar);
             }
 
-
-            if (registrarInventario && registrarDistribucion)
+            if(registrarInventario && registrarDistribucion)
             {
                 response = true;
             }
-
 
             return response;
         }

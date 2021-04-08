@@ -9,6 +9,7 @@ const txtBusquedaProducto = document.querySelector('#txtBusquedaProducto');
 const btnBuscar = document.querySelector('#btnBuscar');
 const RestultBusquedaProducto = document.querySelector('#RestultBusquedaProducto');
 const lbNombreProducto = document.querySelector('#lbNombreProducto');
+const txtNumOrdCompra = document.querySelector('#txtNumOrdCompra');
 
 
 //Cuando esta cargado el html
@@ -16,14 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     await ObtenerListaAlmacenes();
     btnRegistrar.addEventListener('click', obtenerDatosFormulario);
     btnBuscar.addEventListener('click', ObtenerListadoProductosPorPalabraClave);
-    ddlAlmacen.addEventListener('change', ObtenerUbicacionAlmacenPorCodigoAlmacen)
+    ddlAlmacen.addEventListener('change', ObtenerUbicacionAlmacenPorCodigoAlmacen);
+    ddlAlmacen.addEventListener('change', buscarAlmacen)
 });
 
 
 function obtenerDatosFormulario() {
-    if (lbCodigoSap.value && ddlUbicacion.value && ddlAlmacen.value && txtStockProducto.value && txtValorUnitario.value) {
+    if (lbCodigoSap.value && ddlUbicacion.value && ddlAlmacen.value && txtStockProducto.value && txtValorUnitario.value && txtNumOrdCompra.value) {
         const datosFormulario = {
             CodigoSap: lbCodigoSap.value,
+            NumOrdCompra: txtNumOrdCompra.value,
             CodigoAlmacen: ddlAlmacen.value,
             CodigoUbicacion: ddlUbicacion.value,
             Stock: txtStockProducto.value,
@@ -226,11 +229,65 @@ async function ObtenerUbicacionAlmacenPorCodigoAlmacen() {
 };
 
 function llenarSelectUbicacionAlmacen(items) {
+    while (ddlUbicacion.firstChild) {
+        ddlUbicacion.removeChild(ddlUbicacion.firstChild);
+    }
     items.forEach(item => {
-        const { CodigoUbicacion, Descripcion } = item;
+        const { CodigoUbicacion } = item;
         const optionSelectUbicacionAlmacen = document.createElement('option');
         optionSelectUbicacionAlmacen.value = CodigoUbicacion;
         optionSelectUbicacionAlmacen.textContent = CodigoUbicacion;
         ddlUbicacion.appendChild(optionSelectUbicacionAlmacen);
     });
 };
+
+async function buscarAlmacen() {
+    const codigoSap = lbCodigoSap.value;
+    if (codigoSap !== "") {
+        const EndPoint = '/InventarioProducto/ObtenerAlmacenProductoExistenteDistribucion';
+
+        const data = { codigoSap };
+
+        try {
+            const request = await fetch(EndPoint, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const response = await request.json();
+            verificaSeleccionAlmacen(response.data);
+
+        } catch (error) {
+            console.log(error)
+        }
+    } else {
+        Swal.fire({
+            title: 'No ha seleccionado un Producto',
+            text: 'Por favor seleccione un producto antes de seleccionar Almacén',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar'
+        })
+        ddlAlmacen.value = "";
+    }
+
+}
+
+async function verificaSeleccionAlmacen(codAlmacenServer) {
+    const codigoAlmacenSelecc = ddlAlmacen.value;
+    if (codAlmacenServer !== 0) {
+        if (codAlmacenServer !== parseInt(codigoAlmacenSelecc)) {
+            Swal.fire({
+                title: 'El producto ya tiene almacen!',
+                text: `El producto se encuentra en el almacén: ${codAlmacenServer}, por favor cambie el almacén`,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            })
+        }
+    }
+
+}

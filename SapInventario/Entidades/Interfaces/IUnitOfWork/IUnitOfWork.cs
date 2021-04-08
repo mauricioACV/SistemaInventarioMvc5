@@ -10,5 +10,6 @@ namespace SapInventario.Entidades.Interfaces.IUnitOfWork
         IProductoRepositorio ProductoRepositorio { get; }
         IAlmacenUbicacionRepositorio AlmacenUbicacionRepositorio { get; }
         IDistribucionInventarioRepositorio DistribucionInventarioRepositorio { get; }
+        ISalidaProductoRepositorio SalidaProductoRepositorio { get; }
     }
 }
