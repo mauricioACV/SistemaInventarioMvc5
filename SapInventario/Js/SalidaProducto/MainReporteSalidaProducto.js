@@ -1,11 +1,19 @@
 ﻿
 const objProductoEntrega = JSON.parse(localStorage.getItem('objProductoEntrega')) || [];
+const objIndividuoEntrega = JSON.parse(localStorage.getItem('objIndividuoEntrega')) || [];
 const listadoProductoEntrega = document.querySelector('#listadoProductoEntrega');
 const lblDia = document.querySelector('#lblDia');
 const lblMes = document.querySelector('#lblMes');
 const lblAgno = document.querySelector('#lblAgno');
 const html2Pdf = document.querySelector("#zonaImpresion");
 const btnGeneraPdf = document.querySelector('#btnGeneraPdf');
+
+const lbRecepcionadoPor = document.querySelector('#lbRecepcionadoPor');
+const lbEntregadoPorFirma = document.querySelector('#lbEntregadoPorFirma');
+const lbRecepcionadoPorFirma = document.querySelector('#lbRecepcionadoPorFirma');
+const pObservaciones = document.querySelector('#pObservaciones');
+
+
 
 
 
@@ -14,10 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnGeneraPdf.addEventListener('click', generaPdf);
     llenarListadoProductos(objProductoEntrega);
+    fijarIndividualizacion(objIndividuoEntrega);
     fijarFechaReporte();
 });
 
 console.log(objProductoEntrega);
+console.log(objIndividuoEntrega);
 
 function llenarListadoProductos(items) {
     while (listadoProductoEntrega.firstChild) {
@@ -55,10 +65,9 @@ function fijarFechaReporte() {
     const dia = diaActual.getDate();
     const mes = diaActual.getMonth();
     const agno = diaActual.getFullYear();
-    console.log(dia <= 10 ? `0${dia}` : dia, mes <= 10 ? `0${mes}` : mes, agno);
 
-    lblDia.textContent = dia <= 10 ? `0${dia}` : dia;
-    lblMes.textContent = dia, mes <= 10 ? `0${mes}` : mes;
+    lblDia.textContent = dia < 10 ? `0${dia}` : dia;
+    lblMes.textContent = mes < 10 ? `0${mes}` : mes;
     lblAgno.textContent = agno;
 }
 
@@ -80,4 +89,12 @@ function generaPdf() {
             orientation: 'portrait' //lanscape o portrait
         }
     });
+}
+
+function fijarIndividualizacion(items) {
+    const { entregadoPor, observaciones, recepcionadoPor } = items;
+    lbRecepcionadoPor.textContent = recepcionadoPor;
+    lbEntregadoPorFirma.textContent = entregadoPor;
+    lbRecepcionadoPorFirma.textContent = recepcionadoPor;
+    pObservaciones.textContent = observaciones;
 }

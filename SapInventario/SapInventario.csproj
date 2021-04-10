@@ -210,7 +210,7 @@
     <Content Include="Vendors\webfonts\robotocondensed-regular-webfont.woff" />
     <Content Include="Vendors\webfonts\robotocondensed-regular-webfont.woff2" />
     <Content Include="Views\SalidaProducto\ReporteSalidaProducto.cshtml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\InventarioSapProduccion.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

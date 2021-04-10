@@ -3,77 +3,101 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>RegistrarSalidaProducto</title>
-
-</head>
-<body>
-    <div class="row col-md-12 justify-content-between">
-        <div class="row col-md-6">
-            <div class="card col-12" style="border-radius:15px !important">
-                <div class="card-body">
-                    <div class="container-fluid">
-                        <h2 class="text-left">Selección de Productos</h2>
-                        <div class="text-left">
-                            <div class="col-12">
-                                <div class="form-group bmd-form-group">
-                                    <label for="item_CodSapBuscar" class="bmd-label-floating text-left" style="color:black !important">Código SAP o Nombre Producto:</label>
-                                    <input type="text" name="item_CodSapBuscar" id="txtCodSap" class="form-control" />
-                                </div>
+<div class="row col-md-12 justify-content-between">
+    <div class="row col-md-6">
+        <div class="card col-12" style="border-radius:15px !important">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <h2 class="text-left">Selección de Productos</h2>
+                    <div class="text-left">
+                        <div class="col-12">
+                            <div class="form-group bmd-form-group">
+                                <label for="item_CodSapBuscar" class="bmd-label-floating text-left" style="color:black !important">Código SAP o Nombre Producto:</label>
+                                <input type="text" name="item_CodSapBuscar" id="txtCodSap" class="form-control" />
                             </div>
-                        </div>
-                        <div class="container text-center">
-                            <button class="btn btn-info" id="btnBuscar">Buscar Producto</button>
-                        </div>
-                        <div>
-                            <table class="table-bordered table-striped col-12">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>
-                                            Código Sap
-                                        </th>
-                                        <th>
-                                            Nombre Producto
-                                        </th>
-                                        <th>
-                                            Stock
-                                        </th>
-                                        <th>
-                                            Almacen
-                                        </th>
-                                        <th>
-                                            Acciones
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="detalleProducto"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row col-md-6">
-            <div class="card col-12" style="border-radius:8px !important">
-                <div class="card-body">
-                    <h2 class="text-left">Productos Para Entrega</h2>
-                    <div class="col-md-12 p-2 border border-success" style="border-radius:8px">
-                        <div class="row col-md-12 p-1" style="align-content:center !important">
-                            <ul class="align-content-between" style="text-align:center !important; width:100%" id="ulListadoSalida"></ul>
                         </div>
                     </div>
                     <div class="container text-center">
-                        <button class="btn btn-info" id="btnGenerar">Generar Entrega</button>
+                        <button class="btn btn-info" id="btnBuscar">Buscar Producto</button>
+                    </div>
+                    <div>
+                        <table class="table-bordered table-striped col-12">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>
+                                        Código Sap
+                                    </th>
+                                    <th>
+                                        Nombre Producto
+                                    </th>
+                                    <th>
+                                        Stock
+                                    </th>
+                                    <th>
+                                        Almacen
+                                    </th>
+                                    <th>
+                                        Acciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="detalleProducto"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row col-md-6">
+        <div class="card col-12" style="border-radius:8px !important">
+            <div class="card-body">
+                <h2 class="text-left">Productos Para Entrega</h2>
+                <div class="col-md-12 p-2 border border-success" style="border-radius:8px">
+                    <div class="row col-md-12 p-1" style="align-content:center !important">
+                        <ul class="align-content-between" style="text-align:center !important; width:100%" id="ulListadoSalida"></ul>
+                    </div>
+                </div>
+                <div class="container text-center">
+                    <button class="btn btn-info" id="btnIndividualiza" >Individualizar Entrega</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Datos entrega -->
+<div class="modal fade" id="modalDatosEntrega" tabindex="-1" aria-labelledby="exampleModalLabel6" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><strong>Individualización de Entrega</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body align-content-center" id="divFormulario">
+                <div class="col-md-12 ju">
+                    <div>
+                        <div class="p-2">
+                            <input class="form-control input-radius col-sm-12" type="text" placeholder="Recepcionado por:" id="txtRecepcionadoPor" />
+                        </div>
+                        <div class="p-2">
+                            <input class="form-control input-radius col-sm-12" type="text" placeholder="Entregado Por:" id="txtEntregadoPor" />
+                        </div>
+                        <div class="p-2">
+                            <textarea cols="4" rows="4" class="form-control col-sm-12" placeholder="Observaciones" id="txtObservaciones"></textarea>
+                        </div>
+                        <div class="p-2">
+                            <input type="button" class="btn btn-sm btn-info btnSombra col-sm-12 ml-2" name="btnGeneraOrden" id="btnGeneraOrden" value="Generar Orden Entrega" />
+                        </div>
+                    </div>
+                    <div class="align-content-center">
+                        <i class="col-sm-12" style="font-size:smaller">Nota: Complete los datos para la entrega</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Modal Datos Entrega -->
     <script src="~/Js/SalidaProducto/MainSalidaProducto.js"></script>
     <script src="~/Vendors/SweetAlert2/sweetalert2@10.js"></script>
-</body>
-</html>

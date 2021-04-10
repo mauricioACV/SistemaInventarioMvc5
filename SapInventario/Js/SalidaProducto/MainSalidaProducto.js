@@ -2,12 +2,19 @@
 const btnBuscar = document.querySelector('#btnBuscar');
 const detalleProducto = document.querySelector('#detalleProducto');
 const ulListadoSalida = document.querySelector('#ulListadoSalida');
-const btnGenerar = document.querySelector('#btnGenerar');
+const btnIndividualiza = document.querySelector('#btnIndividualiza');
+const btnGeneraOrden = document.querySelector('#btnGeneraOrden');
+const txtRecepcionadoPor = document.querySelector('#txtRecepcionadoPor');
+const txtEntregadoPor = document.querySelector('#txtEntregadoPor');
+const txtObservaciones = document.querySelector('#txtObservaciones');
 let idInputsCantidad = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     btnBuscar.addEventListener('click', buscarProducto);
-    btnGenerar.addEventListener('click', generarEntrega)
+    btnIndividualiza.addEventListener('click', individualizaEntrega);
+    btnGeneraOrden.addEventListener('click', generarEntrega);
+    localStorage.clear();
+
 });
 
 async function buscarProducto() {
@@ -234,24 +241,65 @@ async function verificaStockProducto(CodigoSap, NombreProd) {
 }
 
 function generarEntrega() {
-    let productosEntrega = [];
+    if (txtRecepcionadoPor.value == "" || txtEntregadoPor.value == "" || txtObservaciones.value == "") {
+        Swal.fire({
+            title: 'Todos los campos son obligatorios!',
+            text: "Ingrese datos para individualizar la entrega",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar'
+        })
+    }
+    else {
+        const recepcionadoPor = txtRecepcionadoPor.value;
+        const entregadoPor = txtEntregadoPor.value;
+        const observaciones = txtObservaciones.value;
 
-    idInputsCantidad.forEach(item => {
-        const { codSap, idInput, almacen, NombreProd } = item;
-        const cantidad = document.querySelector(`#${idInput}`).value;
-        productosEntrega.push({ codSap, cantidad, almacen, NombreProd });
-    });
-
-    const cantidadVacia = productosEntrega.some(producto => {
-        return producto.cantidad === ""
-    });
-
-
-    if (cantidadVacia) {
-        console.log('Debe ingresar todas las cantidades')
-    } else {
-        console.log(productosEntrega);
-        localStorage.setItem('objProductoEntrega', JSON.stringify(productosEntrega));
+        const objIndividualiza = {
+            recepcionadoPor,
+            entregadoPor,
+            observaciones,
+        };
+        $('#modalDatosEntrega').modal('hide');
+        console.log(objIndividualiza);
+        localStorage.setItem('objIndividuoEntrega', JSON.stringify(objIndividualiza));
         window.open('/SalidaProducto/ReporteSalidaProducto');
+    }
+}
+
+function individualizaEntrega() {
+    if (idInputsCantidad.length === 0) {
+        Swal.fire({
+            title: 'No se han agregado Productos!',
+            text: "Ingrese productos a la entrega para continuar",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar'
+        })
+    } else {
+        let productosEntrega = [];
+
+        idInputsCantidad.forEach(item => {
+            const { codSap, idInput, almacen, NombreProd } = item;
+            const cantidad = document.querySelector(`#${idInput}`).value;
+            productosEntrega.push({ codSap, cantidad, almacen, NombreProd });
+        });
+
+        const cantidadVacia = productosEntrega.some(producto => {
+            return producto.cantidad === ""
+        });
+
+        if (cantidadVacia) {
+            Swal.fire({
+                title: 'La cantidad a entregar no puede estar en blanco!',
+                text: "Uno o varios de los productos para entrega detalla cantidad en cero",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            })
+        } else {
+            $('#modalDatosEntrega').modal('show');
+            localStorage.setItem('objProductoEntrega', JSON.stringify(productosEntrega));
+        }
     }
 }
