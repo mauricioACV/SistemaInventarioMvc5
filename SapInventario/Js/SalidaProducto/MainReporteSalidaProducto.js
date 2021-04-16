@@ -1,6 +1,8 @@
 ﻿
 const objProductoEntrega = JSON.parse(localStorage.getItem('objProductoEntrega')) || [];
 const objIndividuoEntrega = JSON.parse(localStorage.getItem('objIndividuoEntrega')) || [];
+
+
 const listadoProductoEntrega = document.querySelector('#listadoProductoEntrega');
 const lblDia = document.querySelector('#lblDia');
 const lblMes = document.querySelector('#lblMes');
@@ -13,6 +15,10 @@ const lbEntregadoPorFirma = document.querySelector('#lbEntregadoPorFirma');
 const lbRecepcionadoPorFirma = document.querySelector('#lbRecepcionadoPorFirma');
 const pObservaciones = document.querySelector('#pObservaciones');
 
+const lbCortesiaEntrega = document.querySelector('#lbCortesiaEntrega');
+const lbCortesiaRecepciona = document.querySelector('#lbCortesiaRecepciona');
+const lbUnidad = document.querySelector('#lbUnidad');
+const numActa = document.querySelector('#numActa');
 
 
 
@@ -21,13 +27,10 @@ const pObservaciones = document.querySelector('#pObservaciones');
 document.addEventListener('DOMContentLoaded', () => {
 
     btnGeneraPdf.addEventListener('click', generaPdf);
+    fijarFechaReporte();
     llenarListadoProductos(objProductoEntrega);
     fijarIndividualizacion(objIndividuoEntrega);
-    fijarFechaReporte();
 });
-
-console.log(objProductoEntrega);
-console.log(objIndividuoEntrega);
 
 function llenarListadoProductos(items) {
     while (listadoProductoEntrega.firstChild) {
@@ -63,8 +66,10 @@ function llenarListadoProductos(items) {
 function fijarFechaReporte() {
     const diaActual = new Date();
     const dia = diaActual.getDate();
-    const mes = diaActual.getMonth();
+    const mes = diaActual.getMonth() + 1;
     const agno = diaActual.getFullYear();
+
+    console.log(diaActual, dia, mes, agno);
 
     lblDia.textContent = dia < 10 ? `0${dia}` : dia;
     lblMes.textContent = mes < 10 ? `0${mes}` : mes;
@@ -91,10 +96,105 @@ function generaPdf() {
     });
 }
 
-function fijarIndividualizacion(items) {
-    const { entregadoPor, observaciones, recepcionadoPor } = items;
-    lbRecepcionadoPor.textContent = recepcionadoPor;
+async function fijarIndividualizacion(items) {
+
+    const { entregadoPor, observaciones, recepcionadoPor, centroCosto, gradoEntrega, gradoRecibe, unidad } = items;
+    console.log(objIndividuoEntrega.generado)
+
+    lbRecepcionadoPor.textContent = centroCosto;
     lbEntregadoPorFirma.textContent = entregadoPor;
     lbRecepcionadoPorFirma.textContent = recepcionadoPor;
     pObservaciones.textContent = observaciones;
+    lbCortesiaEntrega.textContent = gradoEntrega;
+    lbCortesiaRecepciona.textContent = gradoRecibe;
+    lbUnidad.textContent = unidad;
+
+    numActa.textContent = await obtenerNumActa();
+    if (!objIndividuoEntrega.generado) {
+        await registrarActa();
+    }
+    objIndividuoEntrega.generado = true;
+    localStorage.setItem('objIndividuoEntrega', JSON.stringify(objIndividuoEntrega));
+
+    console.log(objIndividuoEntrega);
+}
+
+async function obtenerNumActa() {
+
+    const EndPoint = '/SalidaProducto/ObtenerNumeroActa';
+
+
+    try {
+        const request = await fetch(EndPoint, {
+            method: 'POST'
+        });
+
+        const response = await request.json();
+        return response.data;
+
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+async function registrarActa() {
+
+    const { codSap, almacen, cantidad } = objProductoEntrega[0];
+    const { centroCosto, entregadoPor, observaciones, recepcionadoPor, unidad } = objIndividuoEntrega;
+
+    const objSalidaProducto = {
+        CodigoSap: codSap,
+        Unidades: cantidad,
+        IdUsuarioEntrega: 1,
+        UnidadDestino: `${centroCosto}-${unidad}`,
+        FechaEntrega: `${lblAgno.textContent}-${lblMes.textContent}-${lblDia.textContent}`,
+        RecepcionadoPor: recepcionadoPor,
+        Observaciones: observaciones,
+        CodigoAlmacen: almacen,
+        NumActa: numActa.textContent
+    }
+
+    console.log(objSalidaProducto);
+
+    const EndPoint = '/SalidaProducto/RegistrarActa';
+
+    const data = { objSalidaProducto };
+
+    try {
+        const request = await fetch(EndPoint, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const response = await request.json();
+        if (response.data) {
+            Swal.fire({
+                title: 'Exito!',
+                text: "El acta fue registrada sin errores",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                }
+            })
+
+        } else {
+            Swal.fire({
+                title: 'Falló el registro',
+                text: "Algo salió mal, contacte al Administrador!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            })
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
 }

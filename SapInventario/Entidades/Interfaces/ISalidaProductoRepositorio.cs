@@ -9,5 +9,7 @@ namespace SapInventario.Entidades.Interfaces
     public interface ISalidaProductoRepositorio
     {
         int ObtenerTotalUnidadesEntregadasProducto(string codigoSap);
+        int ObtenerUltimoNumeroActa();
+        bool RegistrarActa(SalidaProducto objSalidaProducto);
     }
 }

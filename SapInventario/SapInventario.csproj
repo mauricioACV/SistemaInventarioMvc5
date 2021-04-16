@@ -147,6 +147,7 @@
     <Compile Include="Entidades\Almacen.cs" />
     <Compile Include="Entidades\AlmacenUbicacion.cs" />
     <Compile Include="Entidades\CentroCosto.cs" />
+    <Compile Include="Entidades\DistribucionInventario.cs" />
     <Compile Include="Entidades\Interfaces\IAlmacenRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\IAlmacenUbicacionRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\IDistribucionInventarioRepositorio.cs" />

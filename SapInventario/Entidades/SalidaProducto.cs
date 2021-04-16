@@ -12,7 +12,7 @@ namespace SapInventario.Entidades
         public int Unidades { get; set; }
         public int IdUsuarioEntrega { get; set; }
         public string UnidadDestino { get; set; }
-        public DateTime FechaEntrega { get; set; }
+        public string FechaEntrega { get; set; }
         public string Constancia { get; set; }
         public string RecepcionadoPor { get; set; }
         public string Observaciones { get; set; }

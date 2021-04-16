@@ -160,7 +160,51 @@ namespace SapInventario.Infraestructura.Data.Repositorios
             return stockProducto;
         }
 
-        public int ObtenerStockTotalProductoPorCodigoSap(string codigoSap)
+        public List<DistribucionInventario> ObtenerStockAndAlmacenTotalProductoPorCodigoSap(string codigoSap)
+        {
+            SqlDataReader dr = null;
+            SqlCommand cmd = null;
+            List<DistribucionInventario> stockProducto = new List<DistribucionInventario>();
+
+            try
+            {
+                var query = @"select Id, Stock, CodigoAlmacen from DistribucionInventario where CodigoSap = @CodigoSap";
+
+                using (cmd = new SqlCommand(query, _conexion))
+                {
+                    cmd.Parameters.AddWithValue("@CodigoSap", codigoSap);
+                    _conexion.Open();
+
+                    using (dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            DistribucionInventario objDistribucion = new DistribucionInventario
+                            {
+                                Id = (Convert.ToInt32(dr["Id"])),
+                                Stock = (Convert.ToInt32(dr["Stock"])),
+                                CodigoAlmacen = (Convert.ToInt32(dr["CodigoAlmacen"]))
+                            };
+
+                            stockProducto.Add(objDistribucion);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                _conexion.Close();
+            }
+
+            return stockProducto;
+        }
+
+        public int ObtenerStockPorIdRegistro(string IdRegistro)
         {
             SqlDataReader dr = null;
             SqlCommand cmd = null;
@@ -168,11 +212,11 @@ namespace SapInventario.Infraestructura.Data.Repositorios
 
             try
             {
-                var query = @"select Stock from DistribucionInventario where CodigoSap = @CodigoSap";
+                var query = @"select Stock from DistribucionInventario where Id = @IdRegistro";
 
                 using (cmd = new SqlCommand(query, _conexion))
                 {
-                    cmd.Parameters.AddWithValue("@CodigoSap", codigoSap);
+                    cmd.Parameters.AddWithValue("@IdRegistro", IdRegistro);
                     _conexion.Open();
 
                     using (dr = cmd.ExecuteReader())
@@ -195,6 +239,39 @@ namespace SapInventario.Infraestructura.Data.Repositorios
             }
 
             return stockProducto;
+        }
+
+        public bool ActualizarStockAlmacenPorIdRegistro(string idRegistro, int stock)
+        {
+            bool response = false;
+            SqlCommand cmd = null;
+            var fechaActual = DateTime.Now;
+
+            try
+            {
+                var query = @"UPDATE DistribucionInventario SET Stock = @Stock, FechaActualizacion = @FechaActualizacion WHERE ID = @IdRegistro";
+
+                using (cmd = new SqlCommand(query, _conexion))
+                {
+                    cmd.Parameters.AddWithValue("@Stock", stock);
+                    cmd.Parameters.AddWithValue("@FechaActualizacion", fechaActual);
+                    cmd.Parameters.AddWithValue("@IdRegistro", idRegistro);
+                    _conexion.Open();
+                    int filas = cmd.ExecuteNonQuery();
+                    if (filas > 0) { response = true; }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                _conexion.Close();
+            }
+
+            return response;
         }
     }
 }

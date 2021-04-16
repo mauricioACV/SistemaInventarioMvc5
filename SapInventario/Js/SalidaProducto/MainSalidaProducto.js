@@ -7,13 +7,21 @@ const btnGeneraOrden = document.querySelector('#btnGeneraOrden');
 const txtRecepcionadoPor = document.querySelector('#txtRecepcionadoPor');
 const txtEntregadoPor = document.querySelector('#txtEntregadoPor');
 const txtObservaciones = document.querySelector('#txtObservaciones');
+const modalDatosEntrega = document.querySelector('#modalDatosEntrega');
+const txtUnidad = document.querySelector('#txtUnidad');
+const txtCentroCosto = document.querySelector('#txtCentroCosto');
+const txtGradoRecibe = document.querySelector('#txtGradoRecibe');
+const txtGradoEntrega = document.querySelector('#txtGradoEntrega');
+
+
+
 let idInputsCantidad = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     btnBuscar.addEventListener('click', buscarProducto);
     btnIndividualiza.addEventListener('click', individualizaEntrega);
     btnGeneraOrden.addEventListener('click', generarEntrega);
-    localStorage.clear();
+    //localStorage.clear();
 
 });
 
@@ -38,7 +46,8 @@ async function buscarProducto() {
             const response = await request.json();
 
             if (response.data.length) {
-                await llenarTablaListadoProducto(response.data);
+                //console.log(response.data);
+                llenarTablaListadoProducto(response.data);
             } else {
                 Swal.fire({
                     title: 'El producto que busca no existe!',
@@ -62,7 +71,7 @@ async function buscarProducto() {
     }
 }
 
-async function llenarTablaListadoProducto(items) {
+function llenarTablaListadoProducto(items) {
     while (detalleProducto.firstChild) {
         detalleProducto.removeChild(detalleProducto.firstChild);
     };
@@ -70,46 +79,49 @@ async function llenarTablaListadoProducto(items) {
     items.forEach(async item => {
         const { CodigoSap, NombreProducto } = item;
         const stock = await buscarStockProducto(CodigoSap);
-        const almacen = await buscarAlmacen(CodigoSap);
+        stock.forEach(item => {
+            const { Id, CodigoAlmacen, Stock } = item;
 
-        const trListadoProductos = document.createElement('tr');
+            const trListadoProductos = document.createElement('tr');
 
-        const tdCodigo = document.createElement('td');
-        tdCodigo.innerHTML = `<p class=""> ${CodigoSap} </p>`;
+            const tdCodigo = document.createElement('td');
+            tdCodigo.innerHTML = `<p class=""> ${CodigoSap} </p>`;
 
-        const tdNombre = document.createElement('td');
-        tdNombre.innerHTML = `<p class="">${NombreProducto}</p>`;
+            const tdNombre = document.createElement('td');
+            tdNombre.innerHTML = `<p class="">${NombreProducto}</p>`;
 
-        const tdStock = document.createElement('td');
-        tdStock.innerHTML = `<p class="">${stock}</p>`;
+            const tdStock = document.createElement('td');
+            tdStock.innerHTML = `<p class="">${Stock}</p>`;
 
-        const tdAlmacen = document.createElement('td');
-        tdAlmacen.innerHTML = `<p class="">${almacen}</p>`;
+            const tdAlmacen = document.createElement('td');
+            tdAlmacen.innerHTML = `<p class="">${CodigoAlmacen}</p>`;
 
-        const tdButton = document.createElement('td');
-        const btnSeleccionar = document.createElement('button');
-        btnSeleccionar.innerHTML = 'Seleccionar';
-        btnSeleccionar.onclick = () => fijarProductoEntrega(CodigoSap, NombreProducto, almacen);
-        btnSeleccionar.classList.add("btn", "btn-danger");
-        tdButton.appendChild(btnSeleccionar);
+            const tdButton = document.createElement('td');
+            const btnSeleccionar = document.createElement('button');
+            btnSeleccionar.innerHTML = 'Seleccionar';
+            btnSeleccionar.onclick = () => fijarProductoEntrega(CodigoSap, NombreProducto, CodigoAlmacen, Id, Stock);
+            btnSeleccionar.classList.add("btn", "btn-danger");
+            tdButton.appendChild(btnSeleccionar);
 
-        trListadoProductos.appendChild(tdCodigo);
-        trListadoProductos.appendChild(tdNombre);
-        trListadoProductos.appendChild(tdStock);
-        trListadoProductos.appendChild(tdAlmacen);
-        trListadoProductos.appendChild(tdButton);
+            trListadoProductos.appendChild(tdCodigo);
+            trListadoProductos.appendChild(tdNombre);
+            trListadoProductos.appendChild(tdStock);
+            trListadoProductos.appendChild(tdAlmacen);
+            trListadoProductos.appendChild(tdButton);
 
-        detalleProducto.appendChild(trListadoProductos);
+            detalleProducto.appendChild(trListadoProductos);
+        })
     });
 };
 
-function fijarProductoEntrega(codigoSap, NombreProd, almacen) {
+function fijarProductoEntrega(codigoSap, NombreProd, almacen, Id, Stock) {
     txtCodSap.value = "";
     txtCodSap.focus();
     const existeProducto = ulListadoSalida.classList.contains(`${codigoSap}`);
     if (!existeProducto) {
 
-        idInputsCantidad.push({ codSap: `${codigoSap}`, idInput: `cod${codigoSap}`, almacen: `${almacen}`, NombreProd: `${NombreProd}` });
+        idInputsCantidad.push({ codSap: `${codigoSap}`, idInput: `cod${codigoSap}`, almacen: `${almacen}`, NombreProd: `${NombreProd}`, Id: `${Id}`, Stock: `${Stock}` });
+        console.log(idInputsCantidad);
 
         ulListadoSalida.classList.add(`${codigoSap}`);
 
@@ -121,7 +133,7 @@ function fijarProductoEntrega(codigoSap, NombreProd, almacen) {
         divProd.classList.add('row', 'col-md-5', 'p-2', 'justify-content-center');
 
         const liCodigoSap = document.createElement('li');
-        liCodigoSap.classList.add('list-group-item', 'list-group-item-success', 'col-md-12', 'p-2', 'text-center', `${codigoSap}`);
+        liCodigoSap.classList.add('list-group-item', 'list-group-item-action', 'list-group-item-success', 'col-md-12', 'p-2', 'text-center', `${codigoSap}`);
         liCodigoSap.style.borderRadius = '8px';
         liCodigoSap.textContent = `${codigoSap} ${NombreProd}`;
         divProd.appendChild(liCodigoSap)
@@ -131,10 +143,11 @@ function fijarProductoEntrega(codigoSap, NombreProd, almacen) {
 
         const inputCantidad = document.createElement('input');
         inputCantidad.type = 'number';
-        inputCantidad.addEventListener('blur', () => verificaStockProducto(`${codigoSap}`, `${NombreProd}`));
+        inputCantidad.addEventListener('blur', () => verificaStockProducto(`${codigoSap}`, `${NombreProd}`, `${Id}`));
         inputCantidad.placeholder = 'Cantidad';
         inputCantidad.style.width = '50%';
         inputCantidad.style.borderRadius = '8px';
+        inputCantidad.classList.add('form-control');
         inputCantidad.classList.add('p-1', `${codigoSap}`);
         inputCantidad.id = `cod${codigoSap}`;
         divInputCantidad.appendChild(inputCantidad);
@@ -143,7 +156,7 @@ function fijarProductoEntrega(codigoSap, NombreProd, almacen) {
         divBtnQuitar.classList.add('row', 'col-md-1', 'p-2', 'justify-content-center');
         const btnQuitar = document.createElement('button');
         btnQuitar.classList.add('btn', 'btn-danger');
-        btnQuitar.textContent = 'X';
+        btnQuitar.textContent = 'Quitar';
         btnQuitar.id = `${codigoSap}`;
         btnQuitar.onclick = () => quitarProductoLista(codigoSap);
         divBtnQuitar.appendChild(btnQuitar);
@@ -219,11 +232,13 @@ async function buscarAlmacen(codigoSap) {
     }
 }
 
-async function verificaStockProducto(CodigoSap, NombreProd) {
+async function verificaStockProducto(CodigoSap, NombreProd, Id) {
     const inputStockIngresado = document.querySelector(`#cod${CodigoSap}`);
     if (inputStockIngresado.value !== "") {
 
-        const stock = await buscarStockProducto(CodigoSap);
+        const stock = await buscarStockProductoPorIdRegistro(Id);
+        console.log(stock);
+
         const stockInput = parseInt(inputStockIngresado.value);
         if (parseInt(stock) < stockInput) {
             Swal.fire({
@@ -240,8 +255,31 @@ async function verificaStockProducto(CodigoSap, NombreProd) {
     }
 }
 
+async function buscarStockProductoPorIdRegistro(idRegistro) {
+
+    const EndPoint = '/SalidaProducto/ObtenerStockTotalProductoPorId';
+
+    const data = { idRegistro };
+
+    try {
+        const request = await fetch(EndPoint, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const response = await request.json();
+        return response.data;
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 function generarEntrega() {
-    if (txtRecepcionadoPor.value == "" || txtEntregadoPor.value == "" || txtObservaciones.value == "") {
+    if (txtRecepcionadoPor.value == "" || txtEntregadoPor.value == "" || txtObservaciones.value == "" || txtUnidad.value == "" || txtCentroCosto.value == "" || txtGradoRecibe.value == "" || txtGradoEntrega.value == "") {
         Swal.fire({
             title: 'Todos los campos son obligatorios!',
             text: "Ingrese datos para individualizar la entrega",
@@ -251,21 +289,52 @@ function generarEntrega() {
         })
     }
     else {
-        const recepcionadoPor = txtRecepcionadoPor.value;
-        const entregadoPor = txtEntregadoPor.value;
-        const observaciones = txtObservaciones.value;
+        Swal.fire({
+            title: 'Esta seguro de generar la entrega??',
+            text: "Se descontará la entrega del stock si continua",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Aceptar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const recepcionadoPor = txtRecepcionadoPor.value;
+                const entregadoPor = txtEntregadoPor.value;
+                const observaciones = txtObservaciones.value;
+                const unidad = txtUnidad.value;
+                const centroCosto = txtCentroCosto.value;
+                const gradoRecibe = txtGradoRecibe.value;
+                const gradoEntrega = txtGradoEntrega.value;
+                const idRegistro = idInputsCantidad[0].Id;
+                const stockActualizar = idInputsCantidad[0].Stock;
+                const generado = false;
 
-        const objIndividualiza = {
-            recepcionadoPor,
-            entregadoPor,
-            observaciones,
-        };
-        $('#modalDatosEntrega').modal('hide');
-        console.log(objIndividualiza);
-        localStorage.setItem('objIndividuoEntrega', JSON.stringify(objIndividualiza));
-        window.open('/SalidaProducto/ReporteSalidaProducto');
+                const objIndividualiza = {
+                    recepcionadoPor,
+                    entregadoPor,
+                    observaciones,
+                    unidad,
+                    centroCosto,
+                    gradoRecibe,
+                    gradoEntrega,
+                    idRegistro,
+                    generado
+                };
+
+                $('#modalDatosEntrega').modal('hide');
+                setTimeout(() => {
+                    const actualizaStock = parseInt(stockActualizar) - 1;
+                    ActualizarStockAlmacenPorIdRegistro(idRegistro, actualizaStock);
+                    localStorage.setItem('objIndividuoEntrega', JSON.stringify(objIndividualiza));
+                    window.open('/SalidaProducto/ReporteSalidaProducto');
+                    //location.reload();
+                }, 500);
+
+            }
+        })
     }
-}
+};
 
 function individualizaEntrega() {
     if (idInputsCantidad.length === 0) {
@@ -281,18 +350,18 @@ function individualizaEntrega() {
 
         idInputsCantidad.forEach(item => {
             const { codSap, idInput, almacen, NombreProd } = item;
-            const cantidad = document.querySelector(`#${idInput}`).value;
+            const cantidad = parseInt(document.querySelector(`#${idInput}`).value);
             productosEntrega.push({ codSap, cantidad, almacen, NombreProd });
         });
 
         const cantidadVacia = productosEntrega.some(producto => {
-            return producto.cantidad === ""
+            return producto.cantidad === "" || producto.cantidad === 0
         });
 
         if (cantidadVacia) {
             Swal.fire({
-                title: 'La cantidad a entregar no puede estar en blanco!',
-                text: "Uno o varios de los productos para entrega detalla cantidad en cero",
+                title: 'Debe ingresar una cantidad a entregar!',
+                text: "Uno o varios de los productos para entrega detalla cantidad en cero o en blanco",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Aceptar'
@@ -301,5 +370,28 @@ function individualizaEntrega() {
             $('#modalDatosEntrega').modal('show');
             localStorage.setItem('objProductoEntrega', JSON.stringify(productosEntrega));
         }
+    }
+}
+
+async function ActualizarStockAlmacenPorIdRegistro(idRegistro, stock) {
+
+    const EndPoint = '/SalidaProducto/ActualizarStockAlmacenPorIdRegistro';
+
+    const data = { idRegistro, stock };
+
+    try {
+        const request = await fetch(EndPoint, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const response = await request.json();
+        console.log(response.data);
+
+    } catch (error) {
+        console.log(error)
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 @{
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -58,7 +59,7 @@
                     </div>
                 </div>
                 <div class="container text-center">
-                    <button class="btn btn-info" id="btnIndividualiza" >Individualizar Entrega</button>
+                    <button class="btn btn-info" id="btnIndividualiza">Individualizar Entrega</button>
                 </div>
             </div>
         </div>
@@ -68,20 +69,38 @@
 <div class="modal fade" id="modalDatosEntrega" tabindex="-1" aria-labelledby="exampleModalLabel6" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-light">
                 <h5 class="modal-title" id="exampleModalLabel"><strong>Individualización de Entrega</strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body align-content-center" id="divFormulario">
-                <div class="col-md-12 ju">
+                <div class="col-md-12">
                     <div>
-                        <div class="p-2">
-                            <input class="form-control input-radius col-sm-12" type="text" placeholder="Recepcionado por:" id="txtRecepcionadoPor" />
+                        <div class="row p-2">
+                            <div class="col-md-6">
+                                <input class="form-control col-md-12" type="text" placeholder="Unidad Destino:" id="txtUnidad" />
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control col-md-12" type="text" placeholder="Centro de Costo:" id="txtCentroCosto" />
+                            </div>
                         </div>
-                        <div class="p-2">
-                            <input class="form-control input-radius col-sm-12" type="text" placeholder="Entregado Por:" id="txtEntregadoPor" />
+                        <div class="row p-2">
+                            <div class="col-md-6">
+                                <input class="form-control col-md-12" type="text" placeholder="Recepcionado por:" id="txtRecepcionadoPor" />
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control col-md-12" type="text" placeholder="Grado:" id="txtGradoRecibe" />
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="col-md-6">
+                                <input class="form-control col-md-12" type="text" placeholder="Entregado por:" id="txtEntregadoPor" />
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control col-md-12" type="text" placeholder="Grado:" id="txtGradoEntrega" />
+                            </div>
                         </div>
                         <div class="p-2">
                             <textarea cols="4" rows="4" class="form-control col-sm-12" placeholder="Observaciones" id="txtObservaciones"></textarea>
@@ -98,6 +117,6 @@
         </div>
     </div>
 </div>
-    <!-- Modal Datos Entrega -->
-    <script src="~/Js/SalidaProducto/MainSalidaProducto.js"></script>
-    <script src="~/Vendors/SweetAlert2/sweetalert2@10.js"></script>
+<!-- Modal Datos Entrega -->
+<script src="~/Js/SalidaProducto/MainSalidaProducto.js"></script>
+<script src="~/Vendors/SweetAlert2/sweetalert2@10.js"></script>

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 function obtenerDatosFormulario() {
-    if (lbCodigoSap.value && ddlUbicacion.value && ddlAlmacen.value && txtStockProducto.value && txtValorUnitario.value && txtNumOrdCompra.value) {
+    if (lbCodigoSap.value && ddlAlmacen.value && txtStockProducto.value && txtValorUnitario.value && txtNumOrdCompra.value) {
         const datosFormulario = {
             CodigoSap: lbCodigoSap.value,
             NumOrdCompra: txtNumOrdCompra.value,
@@ -151,8 +151,17 @@ async function ObtenerListadoProductosPorPalabraClave() {
             });
 
             const response = await request.json();
-            llenarTablaListadoProducto(response.data);
-
+            if (response.data.length) {
+                llenarTablaListadoProducto(response.data);
+            } else {
+                Swal.fire({
+                    title: 'El producto que busca no existe!',
+                    text: "Intente con otro parametro de búsqueda",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar'
+                })
+            }
         } catch (error) {
             console.log(error)
         }
@@ -163,11 +172,8 @@ async function ObtenerListadoProductosPorPalabraClave() {
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Aceptar'
-        })
-    }
-
-
-
+        });
+    };
 };
 
 function llenarTablaListadoProducto(items) {
