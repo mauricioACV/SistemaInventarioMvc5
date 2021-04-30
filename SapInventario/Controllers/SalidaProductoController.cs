@@ -75,5 +75,12 @@ namespace SapInventario.Controllers
             var reponse = _salidaProductoServicio.RegistrarActa(objSalidaProducto);
             return Json(new { data = reponse });
         }
+
+        [HttpPost]
+        public ActionResult RegistrarProductosSalida(List<ListaProductoSalida> listaSalidaProducto)
+        {
+            var reponse = _salidaProductoServicio.RegistrarProductosSalida(listaSalidaProducto);
+            return Json(new { data = reponse });
+        }
     }
 }

@@ -62,19 +62,16 @@ namespace SapInventario.Infraestructura.Data.Repositorios
 
             try
             {
-                var query = @"INSERT INTO SalidaProducto (CodigoSap, Unidades, IdUsuarioEntrega, UnidadDestino, FechaEntrega, RecepcionadoPor, Observaciones, CodigoAlmacen, NumActa)
-                                VALUES (@CodigoSap, @Unidades, @IdUsuarioEntrega, @UnidadDestino, @FechaEntrega, @RecepcionadoPor, @Observaciones, @CodigoAlmacen, @NumActa)";
+                var query = @"INSERT INTO SalidaProducto (IdUsuarioEntrega, UnidadDestino, FechaEntrega, RecepcionadoPor, Observaciones, NumActa)
+                                VALUES (@IdUsuarioEntrega, @UnidadDestino, @FechaEntrega, @RecepcionadoPor, @Observaciones, @NumActa)";
 
                 using (cmd = new SqlCommand(query, _conexion))
                 {
-                    cmd.Parameters.AddWithValue("@CodigoSap", objSalidaProducto.CodigoSap);
-                    cmd.Parameters.AddWithValue("@Unidades", objSalidaProducto.Unidades);
                     cmd.Parameters.AddWithValue("@IdUsuarioEntrega", objSalidaProducto.IdUsuarioEntrega);
                     cmd.Parameters.AddWithValue("@UnidadDestino", objSalidaProducto.UnidadDestino);
                     cmd.Parameters.AddWithValue("@FechaEntrega", objSalidaProducto.FechaEntrega);
                     cmd.Parameters.AddWithValue("@RecepcionadoPor", objSalidaProducto.RecepcionadoPor);
                     cmd.Parameters.AddWithValue("@Observaciones", objSalidaProducto.Observaciones);
-                    cmd.Parameters.AddWithValue("@CodigoAlmacen", objSalidaProducto.CodigoAlmacen);
                     cmd.Parameters.AddWithValue("@NumActa", objSalidaProducto.NumActa);
                     _conexion.Open();
                     int filas = cmd.ExecuteNonQuery();

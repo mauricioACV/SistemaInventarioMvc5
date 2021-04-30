@@ -15,5 +15,6 @@ namespace SapInventario.Entidades.Interfaces
         int ObtenerStockPorIdRegistro(string IdRegistro);
         bool ActualizarStockAlmacenPorIdRegistro(string idRegistro, int stock);
         bool RegistrarActa(SalidaProducto objSalidaProducto);
+        bool RegistrarProductosSalida(List<ListaProductoSalida> listaSalidaProducto);
     }
 }

@@ -38,12 +38,12 @@ function llenarListadoProductos(items) {
     };
 
     items.forEach(async item => {
-        const { codSap, NombreProd, cantidad, almacen } = item;
+        const { CodigoSap, NombreProd, cantidad, almacen } = item;
 
         const trListadoProductos = document.createElement('tr');
 
         const tdCodigo = document.createElement('td');
-        tdCodigo.innerHTML = `<p class=""> ${codSap} (${almacen}) </p>`;
+        tdCodigo.innerHTML = `<p class=""> ${CodigoSap} (${almacen}) </p>`;
 
         const tdDescripcion = document.createElement('td');
         tdDescripcion.innerHTML = `<p class="">${NombreProd} (${almacen}) </p>`;
@@ -111,7 +111,7 @@ async function fijarIndividualizacion(items) {
 
     numActa.textContent = await obtenerNumActa();
     if (!objIndividuoEntrega.generado) {
-        await registrarActa();
+        await registrarSalida();
     }
     objIndividuoEntrega.generado = true;
     localStorage.setItem('objIndividuoEntrega', JSON.stringify(objIndividuoEntrega));
@@ -137,24 +137,32 @@ async function obtenerNumActa() {
     }
 };
 
-async function registrarActa() {
+async function registrarSalida() {
 
-    const { codSap, almacen, cantidad } = objProductoEntrega[0];
     const { centroCosto, entregadoPor, observaciones, recepcionadoPor, unidad } = objIndividuoEntrega;
 
     const objSalidaProducto = {
-        CodigoSap: codSap,
-        Unidades: cantidad,
         IdUsuarioEntrega: 1,
         UnidadDestino: `${centroCosto}-${unidad}`,
         FechaEntrega: `${lblAgno.textContent}-${lblMes.textContent}-${lblDia.textContent}`,
         RecepcionadoPor: recepcionadoPor,
         Observaciones: observaciones,
-        CodigoAlmacen: almacen,
         NumActa: numActa.textContent
     }
 
+    objProductoEntrega.forEach(producto => {
+        producto.NumActa = numActa.textContent;
+    });
+
     console.log(objSalidaProducto);
+    console.log(objProductoEntrega);
+
+    await RegistrarProductosSalida(objProductoEntrega);
+    await registrarActa(objSalidaProducto);
+
+}
+
+async function registrarActa(objSalidaProducto) {
 
     const EndPoint = '/SalidaProducto/RegistrarActa';
 
@@ -193,6 +201,29 @@ async function registrarActa() {
                 confirmButtonText: 'Aceptar'
             })
         }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function RegistrarProductosSalida(listaSalidaProducto) {
+
+    const EndPoint = '/SalidaProducto/RegistrarProductosSalida';
+
+    const data = { listaSalidaProducto };
+
+    try {
+        const request = await fetch(EndPoint, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const response = await request.json();
+        console.log(response);
 
     } catch (error) {
         console.log(error)

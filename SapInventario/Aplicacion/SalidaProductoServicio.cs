@@ -50,5 +50,10 @@ namespace SapInventario.Aplicacion
         {
             return _unitOfWork.SalidaProductoRepositorio.RegistrarActa(objSalidaProducto);
         }
+
+        public bool RegistrarProductosSalida(List<ListaProductoSalida> listaSalidaProducto)
+        {
+            return _unitOfWork.ListaProductoSalidaRepositorio.RegistrarProductosSalida(listaSalidaProducto);
+        }
     }
 }

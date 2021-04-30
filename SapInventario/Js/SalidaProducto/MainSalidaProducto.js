@@ -13,8 +13,7 @@ const txtCentroCosto = document.querySelector('#txtCentroCosto');
 const txtGradoRecibe = document.querySelector('#txtGradoRecibe');
 const txtGradoEntrega = document.querySelector('#txtGradoEntrega');
 
-
-
+let productosEntrega = [];
 let idInputsCantidad = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -120,9 +119,7 @@ function fijarProductoEntrega(codigoSap, NombreProd, almacen, Id, Stock) {
     const existeProducto = ulListadoSalida.classList.contains(`${codigoSap}`);
     if (!existeProducto) {
 
-        idInputsCantidad.push({ codSap: `${codigoSap}`, idInput: `cod${codigoSap}`, almacen: `${almacen}`, NombreProd: `${NombreProd}`, Id: `${Id}`, Stock: `${Stock}` });
-        console.log(idInputsCantidad);
-
+        idInputsCantidad.push({ CodigoSap: `${codigoSap}`, idInput: `cod${codigoSap}`, almacen: `${almacen}`, NombreProd: `${NombreProd}`, Id: `${Id}`, Stock: `${Stock}` });
         ulListadoSalida.classList.add(`${codigoSap}`);
 
         const divContenedor = document.createElement('div');
@@ -181,7 +178,7 @@ function fijarProductoEntrega(codigoSap, NombreProd, almacen, Id, Stock) {
 
 function quitarProductoLista(idProducto) {
     const elemento = document.querySelector(`[data-codsap="${idProducto}"]`);
-    idInputsCantidad = idInputsCantidad.filter(producto => producto.codSap !== idProducto);
+    idInputsCantidad = idInputsCantidad.filter(producto => producto.CodigoSap !== idProducto);
     elemento.remove();
     ulListadoSalida.classList.remove(`${idProducto}`);
 }
@@ -237,7 +234,6 @@ async function verificaStockProducto(CodigoSap, NombreProd, Id) {
     if (inputStockIngresado.value !== "") {
 
         const stock = await buscarStockProductoPorIdRegistro(Id);
-        console.log(stock);
 
         const stockInput = parseInt(inputStockIngresado.value);
         if (parseInt(stock) < stockInput) {
@@ -321,15 +317,19 @@ function generarEntrega() {
                     idRegistro,
                     generado
                 };
-
-                $('#modalDatosEntrega').modal('hide');
+                console.log(productosEntrega);
+                console.log(objIndividualiza);
+                productosEntrega.forEach(async item => {
+                    const { Id, Stock, cantidad } = item;
+                    const stockActualizar = parseInt(Stock) - parseInt(cantidad);
+                    await ActualizarStockAlmacenPorIdRegistro(Id, stockActualizar);
+                });
+                localStorage.setItem('objIndividuoEntrega', JSON.stringify(objIndividualiza));
+                window.open('/SalidaProducto/ReporteSalidaProducto');
+                location.reload();
                 setTimeout(() => {
-                    const actualizaStock = parseInt(stockActualizar) - 1;
-                    ActualizarStockAlmacenPorIdRegistro(idRegistro, actualizaStock);
-                    localStorage.setItem('objIndividuoEntrega', JSON.stringify(objIndividualiza));
-                    window.open('/SalidaProducto/ReporteSalidaProducto');
-                    //location.reload();
-                }, 500);
+                    $('#modalDatosEntrega').modal('hide');
+                }, 0);
 
             }
         })
@@ -346,12 +346,10 @@ function individualizaEntrega() {
             confirmButtonText: 'Aceptar'
         })
     } else {
-        let productosEntrega = [];
-
         idInputsCantidad.forEach(item => {
-            const { codSap, idInput, almacen, NombreProd } = item;
+            const { CodigoSap, idInput, almacen, NombreProd, Id, Stock } = item;
             const cantidad = parseInt(document.querySelector(`#${idInput}`).value);
-            productosEntrega.push({ codSap, cantidad, almacen, NombreProd });
+            productosEntrega.push({ CodigoSap, cantidad, almacen, NombreProd, Id, Stock });
         });
 
         const cantidadVacia = productosEntrega.some(producto => {

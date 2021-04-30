@@ -153,6 +153,7 @@
     <Compile Include="Entidades\Interfaces\IDistribucionInventarioRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\IInventarioProductoRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\IInventarioProductoServicio.cs" />
+    <Compile Include="Entidades\Interfaces\IListaProductoSalidaRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\IProductoRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\ISalidaProductoRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\ISalidaProductoServicio.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Entidades\Interfaces\IUsuarioRepositorio.cs" />
     <Compile Include="Entidades\Interfaces\IUsuarioServicio.cs" />
     <Compile Include="Entidades\InventarioProducto.cs" />
+    <Compile Include="Entidades\ListaProductoSalida.cs" />
     <Compile Include="Entidades\Producto.cs" />
     <Compile Include="Entidades\SalidaProducto.cs" />
     <Compile Include="Entidades\Usuario.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Infraestructura\Data\Repositorios\AlmacenUbicacionRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\DistribucionInventarioRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\InventarioProductoRepositorio.cs" />
+    <Compile Include="Infraestructura\Data\Repositorios\ListaProductoSalidaRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\ProductoRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\SalidaProductoRepositorio.cs" />
     <Compile Include="Infraestructura\Data\Repositorios\UsuarioRepositorio.cs" />
